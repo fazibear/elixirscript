@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ex2JS Documentation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/highlight/default.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ex2JS</h1>
+      <h3>EXPERIMENTAL</h3>
+      <p>Translates a subset of Elixir into JavaScript. Below is a list of the current functionality.</p>
+      <a href="https://github.com/bryanjos/ex_to_js">Repo on Github</a>
+      <hr/>
+
+      <div>
+        <h2>Usage</h2>
+        <p>Add the following to your dependencies:</p>
+        <pre>
+          <code>
+            { :ex_to_js, github: "bryanjos/ex_to_js"}
+          </code>
+        </pre>
+
+        <p>You can use the included mix task to convert Elixir to JavaScript</p>
+        <pre>
+          <code>
+            $ mix ex2js -h
+              usage: ex2js &lt;input&gt; [options]
+
+              options:
+
+              -o  --output [path]   places output in the given directory or file
+              -t  --ast             shows only produced spider monkey ast
+              -ex --elixir          read input as elixir code string
+              -h  --help            this message
+          </code>
+        </pre>
+      </div>
+
+      <p>Alternatively, you can clone the repo, do "mix escript.build" and use the created "ex2js" escript in the exact same ways</p>
+
+
+      <h2>Translations</h2>
+      <hr/>
+      <!-- JavaScript will append the translations below -->
+    </div>
+
+    <script src="vendor/highlight/highlight.pack.js"></script>
+    <script src="dist/scripts/app.js"></script>
+    <script>main();</script>
+  </body>
+</html>
