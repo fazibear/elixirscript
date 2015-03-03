@@ -17,7 +17,7 @@ function main() {
   template = fillTemplate("Assignment Patterns", "Assignment patterns are translated into assignment statements.", "\n    a = 1\n    {a,b} = {1,2}\n    ", "\n    let a = 1;\n    [a,b] = [1,2]\n    ");
   templates.push(template);
 
-  template = fillTemplate("def and defp", "defs are translated to exported functions, defps are translated to non-exported functions", "\n    def something() do\n    end\n\n    defp something_else() do\n    end\n    ", "\n    export function something(){}\n\n    function something_else();\n    ");
+  template = fillTemplate("def and defp", "defs are translated to exported functions, defps are translated to non-exported functions. Functions return the last expression", "\n    def something() do\n      if 1 == 1 do\n        1\n      else\n        2\n      end\n    end\n\n    defp something_else() do\n    end\n    ", "\n    export function something(){\n      if(1 == 1){\n        return 1;\n      }else{\n        return 2;\n      }\n    }\n\n    function something_else(){\n      return null;\n    }\n    ");
   templates.push(template);
 
   template = fillTemplate("defmodule", "defmodules are treated as es6 modules", "\n    defmodule Hello do\n    end\n    ", "\n    //no visible representation\n    ");

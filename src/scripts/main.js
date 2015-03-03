@@ -71,18 +71,31 @@ function main(){
 
   template = fillTemplate(
     "def and defp", 
-    "defs are translated to exported functions, defps are translated to non-exported functions", 
+    "defs are translated to exported functions, defps are translated to non-exported functions. Functions return the last expression", 
     `
     def something() do
+      if 1 == 1 do
+        1
+      else
+        2
+      end
     end
 
     defp something_else() do
     end
     `,
     `
-    export function something(){}
+    export function something(){
+      if(1 == 1){
+        return 1;
+      }else{
+        return 2;
+      }
+    }
 
-    function something_else();
+    function something_else(){
+      return null;
+    }
     `
   );
   templates.push(template);
