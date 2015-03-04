@@ -213,6 +213,57 @@ function main(){
   );
   templates.push(template);
 
+  template = fillTemplate(
+    "cond", 
+    "Works for simple binary clauses. No pattern matching support yet", 
+    `
+      cond do
+        1 + 1 == 1 ->
+          a = 1
+          "This will never match"
+        2 * 2 != 4 ->
+          a = 2
+          "Nor this"
+        true ->
+          a = 3
+          "This will"
+      end
+    `,
+    `
+    if(1 + 1 == 1){
+      let a = 1;
+      'This will never match'
+    }else if(2 * 2 != 4){
+      let a = 2;
+      'Nor this'
+    }else{
+      let a = 3;
+      'This will'
+    }
+    `
+  );
+  templates.push(template);
+
+
+  template = fillTemplate(
+    "case", 
+    "Works for simple binary clauses. No pattern matching support yet", 
+    `
+    case data do
+      false -> value = 13
+      _  -> true
+    end
+    `,
+    `
+      if(data == false){
+          let value = 13;
+        }else{
+          true
+        }
+    `
+  );
+  templates.push(template);
+
   let templates_string = templates.join("");
   container.innerHTML = container.innerHTML + templates_string;
   hljs.initHighlighting();

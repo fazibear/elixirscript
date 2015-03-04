@@ -38,6 +38,12 @@ function main() {
   template = fillTemplate("function calls", "", "\n    something()\n    something_else(1, 2)\n    SomeModule.execute()\n    ", "\n    something();\n    something_else(1, 2);\n    SomeModule.execute();\n    ");
   templates.push(template);
 
+  template = fillTemplate("cond", "Works for simple binary clauses. No pattern matching support yet", "\n      cond do\n        1 + 1 == 1 ->\n          a = 1\n          \"This will never match\"\n        2 * 2 != 4 ->\n          a = 2\n          \"Nor this\"\n        true ->\n          a = 3\n          \"This will\"\n      end\n    ", "\n    if(1 + 1 == 1){\n      let a = 1;\n      'This will never match'\n    }else if(2 * 2 != 4){\n      let a = 2;\n      'Nor this'\n    }else{\n      let a = 3;\n      'This will'\n    }\n    ");
+  templates.push(template);
+
+  template = fillTemplate("case", "Works for simple binary clauses. No pattern matching support yet", "\n    case data do\n      false -> value = 13\n      _  -> true\n    end\n    ", "\n      if(data == false){\n          let value = 13;\n        }else{\n          true\n        }\n    ");
+  templates.push(template);
+
   var templates_string = templates.join("");
   container.innerHTML = container.innerHTML + templates_string;
   hljs.initHighlighting();
