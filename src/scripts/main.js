@@ -264,6 +264,69 @@ function main(){
   );
   templates.push(template);
 
+
+  template = fillTemplate(
+    "for", 
+    "Works for one of more generators and with filters. Does support keyword list matching or into yet", 
+    `
+    for n <- [1, 2, 3, 4], do: n * 2
+
+    
+
+
+
+
+
+
+
+    for x <- [1, 2], y <- [2, 3], do: x*y
+
+    
+
+
+
+
+
+
+
+
+    for n <- [1, 2, 3, 4, 5, 6], rem(n, 2) == 0, do: n
+    `,
+    `
+      (function(){
+        let _results = [];
+
+        for(let n of [1,2,3,4])
+          _results.push(n * 2);
+        
+        return _results;
+      });
+
+
+      (function(){
+        let _results = [];
+
+        for(let x of [1,2])
+          for(let y of [2,3])
+            _results.push(x * y);
+          
+        return _results;
+      });
+
+
+      (function(){
+        let _results = [];
+
+        for(let n of [1, 2, 3, 4, 5, 6])
+          if(rem(n, 2) == 0)
+            _results.push(n);
+
+        return _results;
+      });      
+    `
+  );
+  templates.push(template);
+
   let templates_string = templates.join("");
   container.innerHTML = container.innerHTML + templates_string;
   hljs.initHighlighting();

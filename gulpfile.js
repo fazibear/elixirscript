@@ -33,7 +33,7 @@ function reportChange(event){
 }
 
 gulp.task('watch', ['serve'], function() {
-  gulp.watch('src/scripts/**/*.js', ['build', browserSync.reload]).on('change', reportChange);
+  gulp.watch(['index.html','src/scripts/**/*.js'], ['build', browserSync.reload]).on('change', reportChange);
 });
 
 

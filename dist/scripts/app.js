@@ -44,6 +44,9 @@ function main() {
   template = fillTemplate("case", "Works for simple binary clauses. No pattern matching support yet", "\n    case data do\n      false -> value = 13\n      _  -> true\n    end\n    ", "\n      if(data == false){\n          let value = 13;\n        }else{\n          true\n        }\n    ");
   templates.push(template);
 
+  template = fillTemplate("for", "Works for one of more generators and with filters. Does support keyword list matching or into yet", "\n    for n <- [1, 2, 3, 4], do: n * 2\n\n    \n\n\n\n\n\n\n\n    for x <- [1, 2], y <- [2, 3], do: x*y\n\n    \n\n\n\n\n\n\n\n\n    for n <- [1, 2, 3, 4, 5, 6], rem(n, 2) == 0, do: n\n    ", "\n      (function(){\n        let _results = [];\n\n        for(let n of [1,2,3,4])\n          _results.push(n * 2);\n        \n        return _results;\n      });\n\n\n      (function(){\n        let _results = [];\n\n        for(let x of [1,2])\n          for(let y of [2,3])\n            _results.push(x * y);\n          \n        return _results;\n      });\n\n\n      (function(){\n        let _results = [];\n\n        for(let n of [1, 2, 3, 4, 5, 6])\n          if(rem(n, 2) == 0)\n            _results.push(n);\n\n        return _results;\n      });      \n    ");
+  templates.push(template);
+
   var templates_string = templates.join("");
   container.innerHTML = container.innerHTML + templates_string;
   hljs.initHighlighting();
