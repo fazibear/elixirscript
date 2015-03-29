@@ -23,7 +23,7 @@ function main() {
   template = fillTemplate("defmodule", "defmodules are treated as es6 modules", "\n    defmodule Hello do\n    end\n    ", "\n    //no visible representation\n    ");
   templates.push(template);
 
-  template = fillTemplate("imports and aliases", "imports and aliases are turned into import statements", "\n    defmodule Hello do\n      import World\n      import US, only: [la: 1]\n      alias Super.Man\n      alias Super.Man as Kent\n\n    end\n    ", "\n    import * as World from 'world'\n    import la from 'us'\n    import * as Man from 'super/man'\n    import * as Kent from 'super/man'\n    ");
+  template = fillTemplate("imports and aliases", "imports and aliases are turned into import statements", "\n    defmodule Hello do\n      import World\n      import US, only: [la: 1]\n      alias Super.Man\n      alias Super.Man as Kent\n      require JQuery\n\n    end\n    ", "\n    import * as World from 'world'\n    import la from 'us'\n    import * as Man from 'super/man'\n    import * as Kent from 'super/man'\n    import JQuery from 'jquery'\n    ");
   templates.push(template);
 
   template = fillTemplate("structs", "Structs are tranlated into ES6 classes", "\n    defmodule User do\n      defstruct name: \"john\", age: 27\n    end\n\n    defmodule User do\n      defstruct :name, :age\n    end\n    ", "\n    export class User{\n      contructor(name = 'john', age = 27){\n        this.name = name;\n        this.age = age;\n      }\n    }\n\n    export class User{\n      contructor(name, age){\n        this.name = name;\n        this.age = age;\n      }\n    }\n    ");

@@ -114,14 +114,15 @@ function main(){
   templates.push(template);
 
   template = fillTemplate(
-    "imports and aliases", 
-    "imports and aliases are turned into import statements", 
+    "imports, aliases, and requires", 
+    "imports, aliases, and requires are turned into import statements", 
     `
     defmodule Hello do
       import World
       import US, only: [la: 1]
       alias Super.Man
       alias Super.Man as Kent
+      require JQuery
 
     end
     `,
@@ -130,6 +131,7 @@ function main(){
     import la from 'us'
     import * as Man from 'super/man'
     import * as Kent from 'super/man'
+    import JQuery from 'jquery'
     `
   );
   templates.push(template);
