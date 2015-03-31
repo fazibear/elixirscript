@@ -51,7 +51,7 @@ function main(){
     'Hello'
     Symbol('atom')
     [1,2,3]
-    {'0': 1, '1': 2, '2': 3}`
+    {'_0': 1, '_1': 2, '_2': 3}`
   );
   templates.push(template);
 
@@ -64,7 +64,7 @@ function main(){
     `,
     `
     let a = 1;
-    let { '0': a, '1': b } = { '0': 1, '1': 2 }
+    let { '_0': a, '_1': b } = { '_0': 1, '_1': 2 }
     `
   );
   templates.push(template);
@@ -108,7 +108,7 @@ function main(){
     end
     `,
     `
-    //no visible representation
+    const __MODULE__ = Symbol('Hello');
     `
   );
   templates.push(template);
@@ -127,6 +127,8 @@ function main(){
     end
     `,
     `
+    const __MODULE__ = Symbol('Hello');
+
     import * as World from 'world'
     import la from 'us'
     import * as Man from 'super/man'
@@ -147,21 +149,24 @@ function main(){
     defmodule User do
       defstruct :name, :age
     end
+
+    user = %User{name: "Steven"}
     `,
     `
-    export class User{
-      contructor(name = 'john', age = 27){
-        this.name = name;
-        this.age = age;
-      }
+    const __MODULE__ = Symbol('User');
+
+    export defstruct(name='John', age=27){
+      return {__struct__: __MODULE__, name: name, age: age};
     }
 
-    export class User{
-      contructor(name, age){
-        this.name = name;
-        this.age = age;
-      }
+
+    const __MODULE__ = Symbol('User');
+
+    export defstruct(name, age){
+      return {__struct__: __MODULE__, name: name, age: age};
     }
+
+    let user = User.default(name='Steven');
     `
   );
   templates.push(template);

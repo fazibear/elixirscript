@@ -11,22 +11,22 @@ function main() {
   var container = document.getElementsByClassName("container")[0];
   var templates = [];
 
-  var template = fillTemplate("primatives", "Here is how primatives are translated. String interpolation is not supported yet.", "\n    nil\n    1\n    -1.0\n    \"Hello\"\n    :atom\n    [1,2,3]\n    {1,2,3}", "\n    null\n    1\n    -1.0\n    'Hello'\n    Symbol('atom')\n    [1,2,3]\n    {'0': 1, '1': 2, '2': 3}");
+  var template = fillTemplate("primatives", "Here is how primatives are translated. String interpolation is not supported yet.", "\n    nil\n    1\n    -1.0\n    \"Hello\"\n    :atom\n    [1,2,3]\n    {1,2,3}", "\n    null\n    1\n    -1.0\n    'Hello'\n    Symbol('atom')\n    [1,2,3]\n    {'_0': 1, '_1': 2, '_2': 3}");
   templates.push(template);
 
-  template = fillTemplate("Assignment Patterns", "Assignment patterns are translated into assignment statements.", "\n    a = 1\n    {a,b} = {1,2}\n    ", "\n    let a = 1;\n    let { '0': a, '1': b } = { '0': 1, '1': 2 }\n    ");
+  template = fillTemplate("Assignment Patterns", "Assignment patterns are translated into assignment statements.", "\n    a = 1\n    {a,b} = {1,2}\n    ", "\n    let a = 1;\n    let { '_0': a, '_1': b } = { '_0': 1, '_1': 2 }\n    ");
   templates.push(template);
 
   template = fillTemplate("def and defp", "defs are translated to exported functions, defps are translated to non-exported functions. Functions return the last expression", "\n    def something() do\n      if 1 == 1 do\n        1\n      else\n        2\n      end\n    end\n\n    defp something_else() do\n    end\n    ", "\n    export function something(){\n      if(1 == 1){\n        return 1;\n      }else{\n        return 2;\n      }\n    }\n\n    function something_else(){\n      return null;\n    }\n    ");
   templates.push(template);
 
-  template = fillTemplate("defmodule", "defmodules are treated as es6 modules", "\n    defmodule Hello do\n    end\n    ", "\n    //no visible representation\n    ");
+  template = fillTemplate("defmodule", "defmodules are treated as es6 modules", "\n    defmodule Hello do\n    end\n    ", "\n    const __MODULE__ = Symbol('Hello');\n    ");
   templates.push(template);
 
-  template = fillTemplate("imports, aliases, and requires", "imports, aliases, and requires are turned into import statements", "\n    defmodule Hello do\n      import World\n      import US, only: [la: 1]\n      alias Super.Man\n      alias Super.Man as Kent\n      require JQuery\n\n    end\n    ", "\n    import * as World from 'world'\n    import la from 'us'\n    import * as Man from 'super/man'\n    import * as Kent from 'super/man'\n    import JQuery from 'jquery'\n    ");
+  template = fillTemplate("imports, aliases, and requires", "imports, aliases, and requires are turned into import statements", "\n    defmodule Hello do\n      import World\n      import US, only: [la: 1]\n      alias Super.Man\n      alias Super.Man as Kent\n      require JQuery\n\n    end\n    ", "\n    const __MODULE__ = Symbol('Hello');\n\n    import * as World from 'world'\n    import la from 'us'\n    import * as Man from 'super/man'\n    import * as Kent from 'super/man'\n    import JQuery from 'jquery'\n    ");
   templates.push(template);
 
-  template = fillTemplate("structs", "Structs are tranlated into ES6 classes", "\n    defmodule User do\n      defstruct name: \"john\", age: 27\n    end\n\n    defmodule User do\n      defstruct :name, :age\n    end\n    ", "\n    export class User{\n      contructor(name = 'john', age = 27){\n        this.name = name;\n        this.age = age;\n      }\n    }\n\n    export class User{\n      contructor(name, age){\n        this.name = name;\n        this.age = age;\n      }\n    }\n    ");
+  template = fillTemplate("structs", "Structs are tranlated into ES6 classes", "\n    defmodule User do\n      defstruct name: \"john\", age: 27\n    end\n\n    defmodule User do\n      defstruct :name, :age\n    end\n\n    user = %User{name: \"Steven\"}\n    ", "\n    const __MODULE__ = Symbol('User');\n\n    export defstruct(name='John', age=27){\n      return {__struct__: __MODULE__, name: name, age: age};\n    }\n\n\n    const __MODULE__ = Symbol('User');\n\n    export defstruct(name, age){\n      return {__struct__: __MODULE__, name: name, age: age};\n    }\n\n    let user = User.default(name='Steven');\n    ");
   templates.push(template);
 
   template = fillTemplate("anonymous functions", "Anonymous functions are translated into JS anonymous functions", "\n    fn(x) -> x * 2 end\n    ", "\n    x => x * 2\n    ");
