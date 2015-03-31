@@ -51,7 +51,7 @@ function main(){
     'Hello'
     Symbol('atom')
     [1,2,3]
-    [1,2,3]`
+    {'0': 1, '1': 2, '2': 3}`
   );
   templates.push(template);
 
@@ -64,7 +64,7 @@ function main(){
     `,
     `
     let a = 1;
-    [a,b] = [1,2]
+    let { '0': a, '1': b } = { '0': 1, '1': 2 }
     `
   );
   templates.push(template);
