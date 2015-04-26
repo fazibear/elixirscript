@@ -35,12 +35,13 @@ function main(){
 
   let template = fillTemplate(
     "primatives", 
-    "Here is how primatives are translated. String interpolation is not supported yet.", 
+    "Here is how primatives are translated..", 
     `
     nil
     1
     -1.0
     "Hello"
+    "Hello #{length([])}"
     :atom
     [1,2,3]
     {1,2,3}`,
@@ -49,9 +50,10 @@ function main(){
     1
     -1.0
     'Hello'
-    Symbol('atom')
+    'Hello ' + Kernel.to_string(Kernel.length([]))
+    Atom('atom')
     [1,2,3]
-    {'_0': 1, '_1': 2, '_2': 3}`
+    Tuple(1, 2, 3)`
   );
   templates.push(template);
 
@@ -64,7 +66,9 @@ function main(){
     `,
     `
     let a = 1;
-    let { '_0': a, '_1': b } = { '_0': 1, '_1': 2 }
+    let _ref = Tuple(1, 2);
+    let a = _ref[0];
+    let b = _ref[1];
     `
   );
   templates.push(template);
@@ -101,6 +105,108 @@ function main(){
   templates.push(template);
 
   template = fillTemplate(
+    "guards", 
+    "guards work on functions and case statements", 
+    `
+      def something(one) when is_number(one) do
+      end
+
+      def something(one) when is_number(one) or is_atom(one) do
+      end
+
+      case data do
+        number when number in [1,2,3,4] -> 
+          value = 13
+        _  -> 
+          true
+      end
+    `,
+    `
+      export function something(one){
+        if(Kernel.is_number(one)){
+          return null;
+        }
+      }
+
+      export function something(one){
+        if(Kernel.or(Kernel.is_number(one), Kernel.is_atom(one))){
+          return null;
+        }
+      }
+
+      (function(){
+        if(Kernel._in(number, [1, 2, 3, 4])){
+          let value = 13;
+          return value;
+        }else{
+          return true;
+        }
+      }());
+    `
+  );
+  templates.push(template);
+
+  template = fillTemplate(
+    "pattern matching", 
+    "pattern matching work on functions and case statements", 
+    `
+      def something(1) do
+      end
+
+      def something([apple | fruits]) do
+      end
+
+      def something(%AStruct{key: value, key1: 2}) do
+      end
+
+      case data do
+        %AStruct{key: %BStruct{ key2: value }} -> 
+          Logger.info(value)
+        :error -> 
+          nil
+      end
+    `,
+    `
+      export function something(_ref0){
+        if(Kernel.match(1, arguments[0])){
+          return null;
+        }
+      }
+
+      export function something(_ref0){
+        if(Kernel.is_list(arguments[0])){
+          let apple = Kernel.hd(arguments[0]);
+          let fruits = Kernel.tl(arguments[0]);
+          return null;
+        }
+      }
+
+      export function something(_ref0){
+        if(Kernel.match({'__struct__': [Atom('AStruct')], 'key': undefined, 'key1': 2}, arguments[0])){
+          let value = arguments[0]['key'];
+          return null;
+        }
+      }
+
+     (function () {
+         if (Kernel.match({ 
+              '__struct__': [Atom('AStruct')], 
+              'key': { 
+                '__struct__': [Atom('BStruct')], 
+                'key2': undefined 
+              } 
+            }, data)) {
+              let value = data['key']['key2'];
+              return Logger.info(value);
+         } else if (Kernel.match(Atom('error'), data)) {
+             return null;
+         }
+     }());
+    `
+  );
+  templates.push(template);
+
+  template = fillTemplate(
     "defmodule", 
     "defmodules are treated as es6 modules", 
     `
@@ -108,7 +214,7 @@ function main(){
     end
     `,
     `
-    const __MODULE__ = Symbol('Hello');
+    const __MODULE__ = [Atom('Hello')];
     `
   );
   templates.push(template);
@@ -127,7 +233,7 @@ function main(){
     end
     `,
     `
-    const __MODULE__ = Symbol('Hello');
+    const __MODULE__ = [Atom('Hello')];
 
     import * as World from 'world'
     import la from 'us'
@@ -153,14 +259,14 @@ function main(){
     user = %User{name: "Steven"}
     `,
     `
-    const __MODULE__ = Symbol('User');
+    const __MODULE__ = [Atom('User')];
 
     export defstruct(name='John', age=27){
       return {__struct__: __MODULE__, name: name, age: age};
     }
 
 
-    const __MODULE__ = Symbol('User');
+    const __MODULE__ = [Atom('User')];
 
     export defstruct(name, age){
       return {__struct__: __MODULE__, name: name, age: age};
@@ -178,7 +284,9 @@ function main(){
     fn(x) -> x * 2 end
     `,
     `
-    x => x * 2
+    function(x){
+      return x * 2;
+    }
     `
   );
   templates.push(template);
@@ -237,16 +345,18 @@ function main(){
       end
     `,
     `
-    if(1 + 1 == 1){
-      let a = 1;
-      'This will never match'
-    }else if(2 * 2 != 4){
-      let a = 2;
-      'Nor this'
-    }else{
-      let a = 3;
-      'This will'
-    }
+    (function(){
+      if(1 + 1 == 1){
+        let a = 1;
+        return 'This will never match';
+      }else if(2 * 2 != 4){
+        let a = 2;
+        return 'Nor this';
+      }else{
+        let a = 3;
+        return 'This will';
+      }
+    }());
     `
   );
   templates.push(template);
@@ -262,11 +372,14 @@ function main(){
     end
     `,
     `
-      if(data == false){
+      (function(){
+        if(Kernel.match(false, data)){
           let value = 13;
+          return value;
         }else{
-          true
+          return true;
         }
+      }());  
     `
   );
   templates.push(template);
@@ -330,6 +443,54 @@ function main(){
 
         return _results;
       });      
+    `
+  );
+  templates.push(template);
+
+  template = fillTemplate(
+    "^", 
+    "", 
+    `
+    {^a, _, c} = {1, 2, 3}
+    `,
+    `
+    let _ref = Tuple(1, 2, 3);
+
+    if(!Kernel.match(a, _ref[0]))
+      throw new MatchError('no match of right hand side value');
+
+    let undefined = _ref[1];
+    let c = _ref[2];
+      });      
+    `
+  );
+  templates.push(template);
+
+  template = fillTemplate(
+    "&", 
+    "", 
+    `
+    fun = &(&1 * 2)
+    `,
+    `
+     let fun = function () {
+         return arguments[0] * 2;
+     };      
+    `
+  );
+  templates.push(template);
+
+
+  template = fillTemplate(
+    "bitstring", 
+    "", 
+    `
+    <<1, 2, 3>>
+    <<1, "foo" :: utf8, "bar" :: utf32>>
+    `,
+    `
+    BitString(BitString.integer(1), BitString.integer(2), BitString.integer(3))
+    BitString(BitString.integer(1), BitString.utf8('foo'), BitString.utf32('bar'))    
     `
   );
   templates.push(template);

@@ -11,38 +11,67 @@
       <h1>Ex2JS</h1>
       <h3>EXPERIMENTAL</h3>
       <p>Translates a subset of Elixir into JavaScript. Below is a list of the current functionality.</p>
+      <h3>Requirements</h3>
+      <ul>
+        <li>Elixir</li>
+        <li>Node/IO.js</li>
+      </ul>
       <a href="https://github.com/bryanjos/ex_to_js">Repo on Github</a>
+      <br/>
+      <a href="https://github.com/bryanjos/example">Example TODO App</a>
       <hr/>
 
       <div>
         <h2>Usage</h2>
-        <p>Add the following to your dependencies:</p>
-        <pre>
-          <code>
-            { :ex_to_js, github: "bryanjos/ex_to_js"}
-          </code>
-        </pre>
+        <h4>Building from source (recommended)</h4>
+        <ul>
+          <li>
+            Get source
+            <pre><code>git clone git@github.com:bryanjos/ex_to_js.git</code></pre>
+          </li>
+          <li>
+            Get Dependencies
+            <pre>
+              <code>mix deps.get
+npm install</code>
+            </pre>
+          </li>
+          <li>
+            Make distributable
+            <pre><code>MIX_ENV=prod mix ex2js.dist</code></pre>
+          </li>
+          <li>uncompress dist/ex2js.tar.gz.</li>
+          <li>use ex2js executable found in the ex2js/bin folder</li>
+          <li>Optionally you can use the mix command, <pre><code>mix ex2js.install</code></pre> which will install the distributable at /usr/local/ex2js</li>
+        </ul>
+
+        <h4>Using a release version</h4>
+        <ul>
+          <li>Download the latest release from <a href="https://github.com/bryanjos/ex_to_js/releases">releases</a></li>
+          <li>uncompress ex2js.tar.gz.</li>
+          <li>use ex2js executable found in the ex2js/bin folder</li>
+        </ul>
 
         <p>You can use the included mix task to convert Elixir to JavaScript</p>
         <pre>
           <code>
-            $ mix ex2js -h
-              usage: ex2js &lt;input&gt; [options]
+          $ ex2js -h
+            usage: ex2js &lt;input&gt; [options]
 
-              &lt;input&gt; path to elixir files or 
-                      the elixir code string if the -ex flag is used
+            &lt;input&gt; path to elixir files or 
+                    the elixir code string if the -ex flag is used
 
-              options:
+            options:
 
-              -o  --output [path]   places output at the given path
-              -t  --ast             shows only produced spider monkey ast
-              -ex --elixir          read input as elixir code string
-              -h  --help            this message
+            -o  --output [path]   places output at the given path
+            -t  --ast             shows only produced spider monkey ast
+            -ex --elixir          read input as elixir code string
+            -st --stdio           reads from stdio
+                --lib             writes the standard lib js to standard out
+            -h  --help            this message
           </code>
         </pre>
       </div>
-
-      <p>Alternatively, you can clone the repo, do "mix escript.build" and use the created "ex2js" escript in the exact same ways</p>
 
 
       <h2>Translations</h2>
