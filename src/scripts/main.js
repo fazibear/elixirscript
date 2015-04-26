@@ -62,13 +62,25 @@ function main(){
     "Assignment patterns are translated into assignment statements.", 
     `
     a = 1
+
     {a,b} = {1,2}
+    
+    {^a, _, c} = {1, 2, 3}
     `,
     `
     let a = 1;
+
     let _ref = Tuple(1, 2);
     let a = _ref[0];
     let b = _ref[1];
+
+    let _ref = Tuple(1, 2, 3);
+
+    if(!Kernel.match(a, _ref[0]))
+      throw new MatchError('no match of right hand side value');
+
+    let undefined = _ref[1];
+    let c = _ref[2];
     `
   );
   templates.push(template);
@@ -442,25 +454,6 @@ function main(){
             _results.push(n);
 
         return _results;
-      });      
-    `
-  );
-  templates.push(template);
-
-  template = fillTemplate(
-    "^", 
-    "", 
-    `
-    {^a, _, c} = {1, 2, 3}
-    `,
-    `
-    let _ref = Tuple(1, 2, 3);
-
-    if(!Kernel.match(a, _ref[0]))
-      throw new MatchError('no match of right hand side value');
-
-    let undefined = _ref[1];
-    let c = _ref[2];
       });      
     `
   );
