@@ -8,17 +8,18 @@
   </head>
   <body>
     <div class="container">
-      <h1>Ex2JS</h1>
-      <h3>EXPERIMENTAL</h3>
-      <p>Translates a subset of Elixir into JavaScript. Below is a list of the current functionality.</p>
+      <h1>ElixirScript</h1>
+      <p>Translates a subset of Elixir into JavaScript.</p>
       <h3>Requirements</h3>
       <ul>
         <li>Elixir</li>
         <li>Node/IO.js</li>
       </ul>
-      <a href="https://github.com/bryanjos/ex_to_js">Repo on Github</a>
+      <a href="https://github.com/bryanjos/ex_to_js">ElixirScript repo on Github</a>
       <br/>
-      <a href="https://github.com/bryanjos/example">Example TODO App</a>
+      <a href="https://github.com/bryanjos/example">TODO MVC App</a>
+      <br/>
+      <a href="https://github.com/bryanjos/color_bar_spike">Another example app that draws on a canvas using React and Delorean</a>
       <hr/>
 
       <div>
@@ -27,22 +28,22 @@
         <ul>
           <li>
             Get source
-            <pre><code>git clone git@github.com:bryanjos/ex_to_js.git</code></pre>
+            <pre><code class="">git clone git@github.com:bryanjos/ex_to_js.git</code></pre>
           </li>
           <li>
             Get Dependencies
             <pre>
-              <code>mix deps.get
+              <code class="bash hljs">mix deps.get
 npm install</code>
             </pre>
           </li>
           <li>
             Make distributable
-            <pre><code>MIX_ENV=prod mix ex2js.dist</code></pre>
+            <pre><code class="bash hljs">MIX_ENV=prod mix ex2js.dist</code></pre>
           </li>
           <li>uncompress dist/ex2js.tar.gz.</li>
           <li>use ex2js executable found in the ex2js/bin folder</li>
-          <li>Optionally you can use the mix command, <pre><code>mix ex2js.install</code></pre> which will install the distributable at /usr/local/ex2js</li>
+          <li><b>Optionally</b> you can use the mix command, <pre><code>mix ex2js.install</code></pre> which will install the distributable at /usr/local/ex2js</li>
         </ul>
 
         <h4>Using a release version</h4>
@@ -73,10 +74,58 @@ npm install</code>
         </pre>
       </div>
 
+      <p>For more information, please view the README and the issues on the repo. Currently the standard library isn't fully implemented and some of the language features aren't either.</p>
 
-      <h2>Translations</h2>
+      <p><b>NOTE:</b> Since this targets ES6, using something like babeljs is needed to translate it to ES5 JavaScript in order to be used in the browser</p>
+      <h2>Features</h2>
       <hr/>
-      <!-- JavaScript will append the translations below -->
+      <ul>
+        <li> Interoperability with exisiting JavaScript libraries</li>
+        <li> Targets ES6</li>
+        <li> Limited differences from Elixir proper (ElixirScript is still in development and some features from Elixir are still missing or incomplete)</li>
+      </ul>
+      
+      <h2>Differences from Elixir</h2>
+      <hr/>
+      <h4>Modules must be explicitly imported</h4> 
+      <p>Because modules are translated into ES6 modules, when using them in ElixirScript code, you must explicitly import them.</p>
+      <p>
+        <code>import</code> will import either all functions from the module or a subset of functions defined (if the module supports it).
+      </p>
+
+      <pre>
+        <code class="elixir hljs">
+          defmodule Intro do
+              import Hello.World #translates to "import * as World from 'hello/world'"
+              import US, only: [la: 1] #translates to "import la from 'us'"
+          end
+        </code>
+      </pre>
+
+      <p>
+        <code>alias</code> and <code>require</code> work the same. They both work as default import statements
+      </p>
+
+      <pre>
+        <code class="elixir hljs">
+          defmodule Intro do
+              alias Hello.World #translates to "import World from 'hello/world'"
+              require US #translates to "import US from 'us'"
+          end
+        </code>
+      </pre>
+
+      <p>
+        <code>import</code>, <code>alias</code>, and <code>require</code> all except a <code>from</code> clause that allows the import path to be customized
+      </p>
+
+      <pre>
+        <code class="elixir hljs">
+          defmodule Intro do
+              alias Hello.World, from: "some/other/path" #translates to "import World from 'some/other/path'"
+          end
+        </code>
+      </pre>
     </div>
 
     <script src="vendor/highlight/highlight.pack.js"></script>
