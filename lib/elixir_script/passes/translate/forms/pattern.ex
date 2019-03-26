@@ -207,11 +207,11 @@ defmodule ElixirScript.Translate.Forms.Pattern do
     { [PM.starts_with(prefix)], [Form.compile!(value, state)] }
   end
 
-  defp process_pattern({:=, _, [{name, _, _} = target, right]}, state) when not name in [:%, :{}, :^, :%{}, :<<>>] do
+  defp process_pattern({:=, _, [{name, _, _} = target, right]}, state) when name not in [:%, :{}, :^, :%{}, :<<>>] do
     unify(target, right, state)
   end
 
-  defp process_pattern({:=, _, [left, {name, _, _} = target]}, state) when not name in [:%, :{}, :^, :%{}, :<<>>] do
+  defp process_pattern({:=, _, [left, {name, _, _} = target]}, state) when name not in [:%, :{}, :^, :%{}, :<<>>] do
     unify(target, left, state)
   end
 
@@ -241,7 +241,7 @@ defmodule ElixirScript.Translate.Forms.Pattern do
   def get_counter(meta) do
     case Keyword.get(meta, :counter, nil) do
       nil -> ""
-      counter ->
+      {_, counter} ->
         counter
         |> Kernel.abs()
         |> to_string()

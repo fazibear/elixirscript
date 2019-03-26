@@ -5,7 +5,7 @@ defmodule Mix.Tasks.Compile.ElixirScript do
 
   @recursive true
   @manifest ".compile.elixir_script"
-  @manifest_vsn 1
+  #@manifest_vsn 1
 
   @moduledoc """
   Mix compiler to allow mix to compile Elixirscript source files into JavaScript
